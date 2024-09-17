@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const axios = require("axios");
 const path = require("path");
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // MongoDB connection
 mongoose
