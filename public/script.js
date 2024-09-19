@@ -1,22 +1,26 @@
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/api/data")
-    .then((response) => response.json())
-    .then((data) => {
-      const container = document.getElementById("crypto-container");
-      container.innerHTML = data
-        .map(
-          (crypto) => `
-        <div>
-          <h2>${crypto.name}</h2>
-          <p>Last: ${crypto.last}</p>
-          <p>Buy: ${crypto.buy}</p>
-          <p>Sell: ${crypto.sell}</p>
-          <p>Volume: ${crypto.volume}</p>
-          <p>Base Unit: ${crypto.base_unit}</p>
-        </div>
-      `
-        )
-        .join("");
-    })
-    .catch((error) => console.error("Error fetching data:", error));
+document.addEventListener("DOMContentLoaded", async () => {
+  const cryptoData = document.getElementById("crypto-data");
+
+  try {
+    const response = await fetch("/api/data");
+    const data = await response.json();
+
+    data.forEach((crypto, index) => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${crypto.name.toUpperCase()}</td>
+        <td>₹ ${crypto.last}</td>
+        <td>₹ ${crypto.buy} / ₹ ${crypto.sell}</td>
+        <td>${(crypto.last - crypto.buy).toFixed(2)}%</td>
+        <td>₹ ${crypto.sell - crypto.buy}</td>
+      `;
+
+      cryptoData.appendChild(row);
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    cryptoData.innerHTML = "<tr><td colspan='6'>Error loading data</td></tr>";
+  }
 });

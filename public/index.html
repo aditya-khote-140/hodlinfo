@@ -4,12 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hodlinfo</title>
+    <title>HODLINFO Clone</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div id="crypto-container"></div>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">HODLINFO</div>
+        <div class="options">
+            <button>INR</button>
+            <button>BTC</button>
+            <button>Buy BTC</button>
+            <div class="connect-btn">Connect Telegram</div>
+        </div>
+    </header>
+    <!-- Main Trade Info Section -->
+    <section class="main-info">
+        <div class="percentages">
+            <div>0.1% <br> 5 Mins</div>
+            <div>0.96% <br> 1 Hour</div>
+            <div>2.73% <br> 1 Day</div>
+            <div>7.51% <br> 7 Days</div>
+        </div>
+        <div class="best-price">
+            <h1>₹ 26,56,110</h1>
+            <p>Best Price to Trade</p>
+            <p>Average BTC/INR price including commission</p>
+        </div>
+    </section>
+    <!-- Platform Data Table Section -->
+    <section class="platform-data">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Platform</th>
+                    <th>Last Traded Price</th>
+                    <th>Buy / Sell Price</th>
+                    <th>Difference</th>
+                    <th>Savings</th>
+                </tr>
+            </thead>
+            <tbody id="crypto-data">
+                <!-- Data will be injected here via JS -->
+            </tbody>
+        </table>
+    </section>
     <script src="script.js"></script>
 </body>
 

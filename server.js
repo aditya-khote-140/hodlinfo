@@ -8,7 +8,7 @@ const port = 3001;
 // MongoDB connection
 mongoose
   .connect("mongodb://localhost:27017/hodlinfo", {
-    useNewUrlParser: true, // These options are no longer needed in Mongoose 6+, so they can be removed safely
+    useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("MongoDB connected"))
@@ -32,14 +32,13 @@ const fetchData = async () => {
   try {
     const response = await axios.get("https://api.wazirx.com/api/v2/tickers");
 
-    // The API response is a flat object with keys as ticker names, so get the top 10 tickers
     const tickers = response.data;
     const top10 = Object.keys(tickers).slice(0, 10); // Get top 10 keys
 
     // Clear the existing collection
     await Crypto.deleteMany({});
 
-    // Loop through top 10 tickers and save to MongoDB
+    // Save top 10 tickers in MongoDB
     for (let key of top10) {
       const { last, buy, sell, volume, base_unit } = tickers[key];
       const crypto = new Crypto({
@@ -50,7 +49,7 @@ const fetchData = async () => {
         volume,
         base_unit,
       });
-      await crypto.save(); // Save each document in MongoDB
+      await crypto.save();
     }
     console.log("Top 10 results stored successfully.");
   } catch (error) {
@@ -58,21 +57,22 @@ const fetchData = async () => {
   }
 };
 
-// Fetch data when the server starts
+// Fetch data on server start
 fetchData();
 
-// Serve static files from the public directory
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
 
 // Define API route to retrieve data from MongoDB
 app.get("/api/data", async (req, res) => {
   try {
-    const data = await Crypto.find({}); // Fetch all stored records
-    res.json(data); // Send data as JSON response
+    const data = await Crypto.find({}).limit(10); // Fetch only 10 records
+    res.json(data);
   } catch (error) {
     res.status(500).send("Error fetching data");
   }
 });
+
 
 // Start the server
 app.listen(port, () => {
